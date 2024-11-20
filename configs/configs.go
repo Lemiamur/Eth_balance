@@ -7,55 +7,36 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type DefaultConfig struct {
-	HTTPClientTimeout   time.Duration
-	MaxIdleConns        int
-	MaxIdleConnsPerHost int
-	IdleConnTimeout     time.Duration
-	CacheSize           int
-	BlocksToAnalyze     int64
-	BatchSize           int64
-}
-
-var Defaults = DefaultConfig{
-	HTTPClientTimeout:   30 * time.Second,
-	MaxIdleConns:        100,
-	MaxIdleConnsPerHost: 100,
-	IdleConnTimeout:     90 * time.Second,
-	CacheSize:           100,
-	BlocksToAnalyze:     100,
-	BatchSize:           10,
-}
-
 type Config struct {
+	App                 App           `yaml:"app"`
 	GETBLOCK_API_KEY    string        `yaml:"Getblock_Api_Key" env:"GETBLOCK_API_KEY" env-required:"true"`
-	HTTPClientTimeout   time.Duration `yaml:"http_client_timeout" env:"HTTP_CLIENT_TIMEOUT"`
-	MaxIdleConns        int           `yaml:"max_idle_conns" env:"MAX_IDLE_CONNS"`
-	MaxIdleConnsPerHost int           `yaml:"max_idle_conns_per_host" env:"MAX_IDLE_CONNS_PER_HOST"`
-	IdleConnTimeout     time.Duration `yaml:"idle_conn_timeout" env:"IDLE_CONN_TIMEOUT"`
-	CacheSize           int           `yaml:"cache_size" env:"CACHE_SIZE"`
-	BlocksToAnalyze     int64         `yaml:"blocks_to_analyze" env:"BLOCKS_TO_ANALYZE"`
-	BatchSize           int64         `yaml:"batch_size" env:"BATCH_SIZE"`
+	HTTPClientTimeout   time.Duration `yaml:"http_client_timeout"`
+	MaxIdleConns        int           `yaml:"max_idle_conns"`
+	MaxIdleConnsPerHost int           `yaml:"max_idle_conns_per_host"`
+	IdleConnTimeout     time.Duration `yaml:"idle_conn_timeout"`
+	CacheSize           int           `yaml:"cache_size"`
+	BlocksToAnalyze     int64         `yaml:"blocks_to_analyze"`
+	BatchSize           int64         `yaml:"batch_size"`
+	HTTP                HTTP          `yaml:"http"`
+}
+
+type App struct {
+	Name        string `yaml:"name"`
+	Version     string `yaml:"version"`
+	Environment string `yaml:"environment"`
+}
+
+type HTTP struct {
+	Port string `env-required:"true" yaml:"port" env:"HTTP_PORT"`
 }
 
 func LoadConfig(path string) (*Config, error) {
 	if err := godotenv.Load(); err != nil {
 		return nil, err
 	}
-
-	cfg := &Config{
-		HTTPClientTimeout:   Defaults.HTTPClientTimeout,
-		MaxIdleConns:        Defaults.MaxIdleConns,
-		MaxIdleConnsPerHost: Defaults.MaxIdleConnsPerHost,
-		IdleConnTimeout:     Defaults.IdleConnTimeout,
-		CacheSize:           Defaults.CacheSize,
-		BlocksToAnalyze:     Defaults.BlocksToAnalyze,
-		BatchSize:           Defaults.BatchSize,
-	}
-
+	cfg := &Config{}
 	if err := cleanenv.ReadConfig(path, cfg); err != nil {
 		return nil, err
 	}
-
 	return cfg, nil
 }

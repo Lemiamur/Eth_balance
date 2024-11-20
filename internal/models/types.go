@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"math/big"
 )
 
 type TransactionData struct {
@@ -44,4 +45,10 @@ type Transaction struct {
 	GasPrice         string `json:"gasPrice"`
 	BlockNumber      string `json:"blockNumber"`
 	TransactionIndex string `json:"transactionIndex"`
+}
+
+type ResultBlock struct {
+	Address   string     `json:"address"`
+	ChangeEth *big.Float `json:"changeEth"`
+	Sign      string     `json:"sign"`
 }

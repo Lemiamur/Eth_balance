@@ -1,1 +1,14 @@
-GETBLOCK_API_KEY: "YOUR_GETBLOCK_API_KEY"
+app:
+  name: "Eth_bal"
+  version: "1.0.0"
+  environment: "development"
+Getblock_Api_Key: "your_getblock_api_key"
+http_client_timeout: 30s
+max_idle_conns: 100
+max_idle_conns_per_host: 100
+idle_conn_timeout: 90s
+cache_size: 100
+blocks_to_analyze: 100
+batch_size: 10
+http:
+  port: "8080"
